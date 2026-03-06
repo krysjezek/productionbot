@@ -64,7 +64,8 @@ The contact forms now POST to `/api/submit`, which is a tiny Vercel serverless f
    - `CONTACT_RECIPIENT_EMAIL` – the inbox that should receive every submission.
    - `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` / `SMTP_SECURE` – your SMTP relay (Gmail, SendGrid, Postmark, etc.). `SMTP_SECURE` should be `true` when using 465-style TLS.
    - (Optional) `CONTACT_FROM_EMAIL` to customize the sender.
-3. The form handlers will return JSON that the Webflow markup already expects (`200` for success, `4xx/5xx` on error).
-4. The `vercel.json` file targets Node 20 for the `/api/submit` route.
+3. The handler accepts URL-encoded and JSON payloads, validates email format, and returns JSON that the Webflow markup already expects (`200` on success, `400` for invalid input, `500` when SMTP/env config is missing or delivery fails).
+4. Required env vars for delivery are `CONTACT_RECIPIENT_EMAIL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, and `SMTP_PASS`. `SMTP_SECURE=true` is recommended for port `465`.
+5. The `vercel.json` file targets Node 20 for the `/api/submit` route.
 
 If you prefer to log submissions somewhere else (Slack, spreadsheets, etc.), I can swap the handler accordingly—just let me know the destination.
